@@ -10,7 +10,7 @@ npm install
 ```
 2. Start the JSON server (runs on port 3000):
 ```plaintext   
-   json-server --watch events.json --port 3000
+json-server --watch events.json --port 3000
 ```
 3. In a separte terminal, start the Reach development server:
 ```plaintext
