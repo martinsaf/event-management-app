@@ -27,18 +27,21 @@ const EventForm = ({ onSubmit, initialData = {}, submitButtonText }) => {
   const [startTime, setStartTime] = useState(initialData.startTime || ""); // State for event start time
   const [endTime, setEndTime] = useState(initialData.endTime || ""); // State for event end time
   const [selectedCategories, setSelectedCategories] = useState(
-    initialData.categoryIds || []
+    initialData.categoryIds
+      ? initialData.categoryIds.map((id) => id.toString())
+      : []
   );
   // State for selected categories
-  const [selectedUser, setSelectedUser] = useState(initialData.createdBy || ""); // State for selected user
-
+  const [selectedUser, setSelectedUser] = useState(
+    initialData.createdBy ? initialData.createdBy.toString() : ""
+  );
   // Handle category selection
   const handleCategoryChange = (categoryId) => {
-    setSelectedCategories(
-      (prevSelected) =>
-        prevSelected.includes(categoryId)
-          ? prevSelected.filter((id) => id !== categoryId) // Remove category if already selected
-          : [...prevSelected, categoryId] // Add category if not selected
+    const categoryIdStr = categoryId.toString(); // Normaliza para string
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryIdStr)
+        ? prevSelected.filter((id) => id !== categoryIdStr)
+        : [...prevSelected, categoryIdStr]
     );
   };
 
@@ -85,8 +88,8 @@ const EventForm = ({ onSubmit, initialData = {}, submitButtonText }) => {
       image,
       startTime,
       endTime,
-      categoryIds: selectedCategories,
-      createdBy: Number(selectedUser),
+      categoryIds: selectedCategories.map((id) => id.toString()),
+      createdBy: selectedUser.toString(),
     });
   };
 
@@ -142,7 +145,7 @@ const EventForm = ({ onSubmit, initialData = {}, submitButtonText }) => {
               <Checkbox
                 key={category.id}
                 value={category.id}
-                isChecked={selectedCategories.includes(category.id)} // Set checkbox state
+                isChecked={selectedCategories.includes(category.id.toString())} // Set checkbox state
                 onChange={() => handleCategoryChange(category.id)} // Handle category selection
               >
                 {category.name} {/* Display category name */}
