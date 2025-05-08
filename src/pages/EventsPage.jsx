@@ -37,19 +37,26 @@ export const EventsPage = () => {
     const matchesSearch = event.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
+
     const matchesCategory =
       selectedCategories.length > 0
-        ? selectedCategories.every((categoryId) =>
-            event.categoryIds.includes(categoryId)
+        ? selectedCategories.some((selectedId) =>
+            event.categoryIds.some(
+              (eventCategoryId) =>
+                eventCategoryId.toString() === selectedId.toString()
+            )
           )
         : true;
+
     return matchesSearch && matchesCategory;
   });
 
   // Function to get category names from category IDs
   const getCategoryNames = (categoryIds) => {
     return categoryIds.map((id) => {
-      const category = categories.find((cat) => cat.id === id);
+      const category = categories.find(
+        (cat) => cat.id.toString() === id.toString()
+      );
       return category ? category.name : "Unknown";
     });
   };

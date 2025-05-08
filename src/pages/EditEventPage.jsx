@@ -12,14 +12,23 @@ export const EditEventPage = () => {
   // Handle form submission
   const handleEditEvent = async (updatedEvent) => {
     try {
+      // Normaliza os dados antes de enviar
+      const normalizedEvent = {
+        ...updatedEvent,
+        categoryIds: updatedEvent.categoryIds.map((id) => id.toString()), // Garante que categoryIds sejam strings
+        createdBy: updatedEvent.createdBy.toString(), // Garante que createdBy seja string
+      };
+
       const response = await fetch(`http://localhost:3000/events/${event.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedEvent),
+        body: JSON.stringify(normalizedEvent), // Envia os dados normalizados
       });
+
       if (!response.ok) {
         throw new Error("Failed to update event");
       }
+
       toast({
         title: "Event Updated",
         description: "The event has been successfully updated",
@@ -27,7 +36,7 @@ export const EditEventPage = () => {
         duration: 5000,
         isClosable: true,
       });
-      navigate(`/event/${event.id}`); // Navigate to the event page
+      navigate(`/event/${event.id}`);
     } catch (error) {
       toast({
         title: "Error",

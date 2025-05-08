@@ -26,14 +26,18 @@ export const EventPage = () => {
     return <Center>Loading...</Center>; // Display loading state
   }
 
-  const creator = users.find((user) => user.id === event.createdBy); // Find the creator of the event
+  const creator = users.find(
+    (user) => user.id.toString() === event.createdBy.toString()
+  ); // Find the creator of the event
 
   // Transform the category IDs of an event into readable category names
   const eventCategories = event.categoryIds
-    .map(
-      (categoryId) =>
-        categories.find((category) => category.id === categoryId)?.name
-    )
+    .map((categoryId) => {
+      const foundCategory = categories.find(
+        (category) => category.id.toString() === categoryId.toString()
+      );
+      return foundCategory?.name;
+    })
     .filter(Boolean)
     .join(", "); // Get event categories names
 

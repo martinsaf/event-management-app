@@ -11,14 +11,23 @@ export const AddEventPage = () => {
   // Handle form submission
   const handleAddEvent = async (newEvent) => {
     try {
+      // Normaliza os dados antes de enviar
+      const normalizedEvent = {
+        ...newEvent,
+        categoryIds: newEvent.categoryIds.map((id) => id.toString()), // Garante que categoryIds sejam strings
+        createdBy: newEvent.createdBy.toString(), // Garante que createdBy seja string
+      };
+
       const response = await fetch("http://localhost:3000/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newEvent),
+        body: JSON.stringify(normalizedEvent), // Envia os dados normalizados
       });
+
       if (!response.ok) {
         throw new Error("Failed to add event");
       }
+
       toast({
         title: "Event Added",
         description: "The event has been successfully added",
@@ -26,7 +35,7 @@ export const AddEventPage = () => {
         duration: 5000,
         isClosable: true,
       });
-      navigate("/"); // Navigate to the events page
+      navigate("/");
     } catch (error) {
       toast({
         title: "Error",
